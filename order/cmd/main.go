@@ -5,6 +5,7 @@ import (
 
 	"github.com/kaua-victor/microservices/order/config"
 	"github.com/kaua-victor/microservices/order/internal/adapters/db"
+	payment_adapter "github.com/kaua-victor/microservices/order/internal/adapters/payment"
 
 	//"github.com/kaua-victor/microservices/order/internal/adapters/rest"
 	"github.com/kaua-victor/microservices/order/internal/adapters/grpc"
@@ -12,11 +13,18 @@ import (
 )
 
 func main() {
+
 	dbAdapter, err := db.NewAdapter(config.GetDataSourceURL())
 	if err != nil {
 		log.Fatalf("Failed to connect to database. Error: %v", err)
 	}
-	application := api.NewApplication(dbAdapter)
+
+	paymentAdapter, err := payment_adapter.NewAdapter(config.GetPaymentServiceUrl())
+	if err != nil {
+		log.Fatalf("Failed to initialize to payment stub. Error: %v", err)
+	}
+
+	application := api.NewApplication(dbAdapter, paymentAdapter)
 	grpcAdapter := grpc.NewAdapter(application, config.GetApplicationPort())
 	grpcAdapter.Run()
 }
