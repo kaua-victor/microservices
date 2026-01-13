@@ -29,7 +29,7 @@ func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) 
 	if err != nil {
 		return nil, err
 	}
-	return &order.CreateOrderResponse{OrderId: int32(result.ID)}, nil
+	return &order.CreateOrderResponse{OrderId: int32(result.ID), Status: result.Status}, nil
 }
 
 type Adapter struct {
