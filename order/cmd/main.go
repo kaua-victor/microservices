@@ -6,6 +6,7 @@ import (
 	"github.com/kaua-victor/microservices/order/config"
 	"github.com/kaua-victor/microservices/order/internal/adapters/db"
 	payment_adapter "github.com/kaua-victor/microservices/order/internal/adapters/payment"
+	shipping_adapter "github.com/kaua-victor/microservices/order/internal/adapters/shipping"
 
 	//"github.com/kaua-victor/microservices/order/internal/adapters/rest"
 	"github.com/kaua-victor/microservices/order/internal/adapters/grpc"
@@ -24,7 +25,14 @@ func main() {
 		log.Fatalf("Failed to initialize to payment stub. Error: %v", err)
 	}
 
-	application := api.NewApplication(dbAdapter, paymentAdapter)
+	shippingAdapter, err := shipping_adapter.NewAdapter(
+		config.GetShippingServiceUrl(),
+	)
+	if err != nil {
+		log.Fatalf("Failed to initialize shipping stub. Error: %v", err)
+	}
+
+	application := api.NewApplication(dbAdapter, paymentAdapter, shippingAdapter)
 	grpcAdapter := grpc.NewAdapter(application, config.GetApplicationPort())
 	grpcAdapter.Run()
 }
