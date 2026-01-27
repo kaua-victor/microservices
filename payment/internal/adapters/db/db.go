@@ -3,7 +3,8 @@ package db
 import (
 	"context"
 	"fmt"
-	"github.com/huseyinbabal/microservices/payment/internal/application/core/domain"
+
+	"github.com/kaua-victor/microservices/payment/internal/application/core/domain"
 	"github.com/uptrace/opentelemetry-go-extra/otelgorm"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

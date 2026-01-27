@@ -1,8 +1,8 @@
-module github.com/huseyinbabal/microservices/payment
+module github.com/kaua-victor/microservices/payment
 
 go 1.25.1
 
-require github.com/ruandg/microservices-proto/golang/payment v0.0.0-00010101000000-000000000000
+require github.com/kaua-victor/microservices-proto/golang/payment v0.0.0-00010101000000-000000000000
 
 require (
 	github.com/sirupsen/logrus v1.9.0
@@ -34,4 +34,4 @@ require (
 	google.golang.org/protobuf v1.36.11 // indirect
 )
 
-replace github.com/ruandg/microservices-proto/golang/payment => ../../microservices-proto/golang/payment
+replace github.com/kaua-victor/microservices-proto/golang/payment => ../../microservices-proto/golang/payment
