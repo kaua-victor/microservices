@@ -1,3 +1,12 @@
 CREATE DATABASE IF NOT EXISTS `order`;
 CREATE DATABASE IF NOT EXISTS `payment`;
 CREATE DATABASE IF NOT EXISTS `shipping`;
+
+USE `order`;
+
+CREATE TABLE IF NOT EXISTS products (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    product_code VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO products (product_code) VALUES ('P1'), ('P2'), ('P3');

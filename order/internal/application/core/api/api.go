@@ -11,17 +11,38 @@ type Application struct {
 	db       ports.DBPort
 	payment  ports.PaymentPort
 	shipping ports.ShippingPort
+	product  ports.ProductPort
 }
 
-func NewApplication(db ports.DBPort, payment ports.PaymentPort, shipping ports.ShippingPort) *Application {
+func NewApplication(db ports.DBPort, payment ports.PaymentPort, shipping ports.ShippingPort, product ports.ProductPort) *Application {
 	return &Application{
 		db:       db,
 		payment:  payment,
 		shipping: shipping,
+		product:  product,
 	}
 }
 
 func (a Application) PlaceOrder(order domain.Order) (domain.Order, error) {
+
+	for _, item := range order.OrderItems {
+		exists, err := a.product.Exists(item.ProductCode)
+		if err != nil {
+			return domain.Order{}, status.Errorf(
+				codes.Internal,
+				"failed to validate product %s",
+				item.ProductCode,
+			)
+		}
+
+		if !exists {
+			return domain.Order{}, status.Errorf(
+				codes.InvalidArgument,
+				"product %s does not exist",
+				item.ProductCode,
+			)
+		}
+	}
 
 	order.Status = "Pending"
 
