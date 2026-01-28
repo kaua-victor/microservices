@@ -1,8 +1,11 @@
-FROM golang:1.18 AS builder
-WORKDIR /usr/src/app
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o payment ./cmd/main.go
+FROM golang:1.25-alpine
 
-FROM scratch
-COPY --from=builder /usr/src/app/payment ./payment
-CMD ["./payment"]
+WORKDIR /app
+
+COPY . .
+
+RUN go build -mod=vendor -o payment-service ./cmd/main.go
+
+EXPOSE 3001
+
+CMD ["./payment-service"]

@@ -42,13 +42,6 @@ func (a *Adapter) CreateShipping(order *domain.Order) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
-	// _, err := a.client.Create(ctx, &shipping.CreateShippingRequest{
-	// 	OrderId: order.ID,
-	// 	Items:   items,
-	// })
-
-	// return err
-
 	resp, err := a.client.Create(ctx, &shipping.CreateShippingRequest{
 		OrderId: order.ID,
 		Items:   items,
