@@ -46,10 +46,10 @@ docker compose version
 
 ### 1️⃣ Subir todos os serviços
 
-Na raiz do projeto (onde está o `docker-compose.yaml`), execute:
+Na pasta microservices (onde está o `docker-compose.yaml`), execute:
 bash
 ```
-docker compose up --build -d
+docker compose up --build
 ```
 
 Este comando irá:
