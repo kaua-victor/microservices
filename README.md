@@ -125,7 +125,7 @@ powershell na pasta de microservices
 ]}' `
 -plaintext localhost:3000 Order/Create
 
-### 🔹 Teste de erro – mais de 50 pedidos
+### 🔹 Teste de erro – mais de 50 produtos
 
 & "C:\Program Files\grpcurl_1.9.3_windows_x86_64\grpcurl.exe" `
 -d '{\"costumer_id\":123,\"order_items\":[
@@ -137,7 +137,7 @@ powershell na pasta de microservices
 ## ⚠️ Regras implementadas
 
 * Máximo de **50 itens por pedido**
-* Pagamento com timeout e retry
+* Pagamento **de valor até 1000**
 * Shipping só é chamado após pagamento bem-sucedido
 * Validação de existência de produtos no banco
 * Status do pedido:
