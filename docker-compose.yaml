@@ -1,0 +1,61 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  payment:
+    build: ./payment
+    container_name: payment
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATA_SOURCE_URL: root:root@tcp(mysql:3306)/payment?charset=utf8mb4&parseTime=True&loc=Local
+      APPLICATION_PORT: 3001
+      ENV: development
+    ports:
+      - "3001:3001"
+
+  shipping:
+    build: ./shipping
+    container_name: shipping
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATA_SOURCE_URL: root:root@tcp(mysql:3306)/shipping?charset=utf8mb4&parseTime=True&loc=Local
+      APPLICATION_PORT: 3002
+      ENV: development
+    ports:
+      - "3002:3002"
+
+  order:
+    build: ./order
+    container_name: order
+    depends_on:
+      mysql:
+        condition: service_healthy
+      payment:
+        condition: service_started
+      shipping:
+        condition: service_started
+    environment:
+      DATA_SOURCE_URL: root:root@tcp(mysql:3306)/order?charset=utf8mb4&parseTime=True&loc=Local
+      PAYMENT_SERVICE_URL: payment:3001
+      SHIPPING_SERVICE_URL: shipping:3002
+      APPLICATION_PORT: 3000
+      ENV: development
+    ports:
+      - "3000:3000"
